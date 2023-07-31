@@ -14,11 +14,6 @@ const RESTRICTED_IMPORTS = [
   { name: 'graphql/type/definition', message: 'use `graphql`' },
   { name: 'graphql/type/directives', message: 'use `graphql`' },
   { name: 'graphql/version', message: 'use `graphql`' },
-  {
-    name: 'monaco-editor',
-    message:
-      '`monaco-editor` imports all languages; use `monaco-graphql/esm/monaco-editor` instead to import only `json` and `graphql` languages',
-  },
 ];
 
 module.exports = {

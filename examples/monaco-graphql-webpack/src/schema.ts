@@ -5,8 +5,6 @@ import {
   parse,
   buildASTSchema,
 } from 'graphql';
-import type { SchemaConfig } from 'monaco-graphql';
-import { Uri } from 'monaco-graphql/esm/monaco-editor';
 
 const SCHEMA_URL = 'https://api.github.com/graphql';
 const API_TOKEN = localStorage.getItem('ghapi') || null;
@@ -38,7 +36,7 @@ const setSchemaStatus = (message: string) => {
 class MySchemaFetcher {
   private _options: typeof schemaOptions;
   private _currentSchema: (typeof schemaOptions)[0];
-  private _schemaCache = new Map<string, SchemaConfig>();
+  private _schemaCache = new Map<string, any>();
   private _schemaOverride = new Map<string, string>();
 
   constructor(options = schemaOptions) {
@@ -100,7 +98,7 @@ class MySchemaFetcher {
       this._schemaCache.set(url, {
         introspectionJSON,
         documentString,
-        uri: Uri.parse(url).toString(),
+        //uri: Uri.parse(url).toString(),
       });
 
       this.clearOverride();
