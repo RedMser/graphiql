@@ -16,11 +16,6 @@ let monacoGraphQLAPI: MonacoGraphQLAPI | null = null;
 void render();
 
 async function render() {
-  if (!schemaFetcher.token) {
-    renderGithubLoginButton();
-
-    return;
-  }
   monacoGraphQLAPI ||= initializeMode({
     formattingOptions: {
       prettierConfig: {
@@ -50,8 +45,6 @@ async function render() {
   } = editors;
   const { schemaReloadButton, executeOpButton, schemaPicker } =
     renderToolbar(toolbar);
-
-  renderGithubLoginButton();
 
   const operationUri = operationModel.uri.toString();
 
@@ -263,58 +256,4 @@ function getSchemaPicker(): HTMLSelectElement {
   }
 
   return schemaPicker;
-}
-
-/**
- * login using the provided netlify API for oauth
- */
-export function renderGithubLoginButton() {
-  const githubLoginWrapper = document.createElement('div');
-  githubLoginWrapper.id = 'github-login-wrapper';
-  githubLoginWrapper.innerHTML =
-    "<p>Using Netlify's OAuth client to retrieve your token, you'll see a simple GitHub graphql <code>monaco-graphql</code> Demo.</p>";
-  const githubButton = document.createElement('button');
-
-  const logoutButton = document.createElement('button');
-
-  logoutButton.innerHTML = 'Logout';
-
-  logoutButton.onclick = async e => {
-    e.preventDefault();
-    schemaFetcher.logout();
-    await render();
-    document
-      .getElementById('session-editor')
-      ?.setAttribute('style', 'display: none');
-    document.getElementById('toolbar')?.setAttribute('style', 'display: none');
-  };
-
-  if (schemaFetcher.token) {
-    document.getElementById('github-login-wrapper')?.remove();
-    const toolbar = document.getElementById('toolbar');
-    toolbar?.append(logoutButton);
-  } else {
-    githubLoginWrapper.append(githubButton);
-    document.getElementById('flex-wrapper')?.prepend(githubLoginWrapper);
-  }
-
-  githubButton.id = 'login';
-  githubButton.innerHTML = 'GitHub Login';
-
-  githubButton.onclick = e => {
-    e.preventDefault();
-    // @ts-expect-error
-    const authenticator = new netlify.default({ site_id: SITE_ID });
-    authenticator.authenticate(
-      { provider: 'github', scope: ['user'] },
-      async (err: Error, data: { token: string }) => {
-        if (err) {
-          console.error('Error authenticating with GitHub:', err);
-        } else {
-          await schemaFetcher.setApiToken(data.token);
-          await render();
-        }
-      },
-    );
-  };
 }
