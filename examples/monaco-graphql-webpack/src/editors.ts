@@ -1,6 +1,6 @@
 import { editor, Uri } from 'monaco-graphql/esm/monaco-editor';
 
-const GRAPHQL_LANGUAGE_ID = 'graphql';
+const GRAPHQL_LANGUAGE_ID = 'typescript';
 
 const operationString =
   localStorage.getItem('operations') ??

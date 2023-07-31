@@ -59,7 +59,7 @@ const resultConfig = {
     }),
 
     new MonacoWebpackPlugin({
-      languages: ['json', 'graphql'],
+      languages: ['json', 'graphql', 'typescript'],
       publicPath: '/',
       customLanguages: [
         {
